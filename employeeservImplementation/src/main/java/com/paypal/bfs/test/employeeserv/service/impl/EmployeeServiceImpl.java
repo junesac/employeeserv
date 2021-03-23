@@ -30,6 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employees;
 	}
 
+	@Override
+	public Employee createEmployee(Employee employee) {
+		util.validate(employee);
+		EmployeeEntity empEnttity = employeeRepository.save(getEmployeeEntity(employee));
+		return getEmployee(empEnttity);
+	}
+
 	private Employee getEmployee(EmployeeEntity emp) {
 
 		Address address = new Address();
@@ -59,13 +66,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 				addressE);
 
 		return employee;
-	}
-
-	@Override
-	public Employee createEmployee(Employee employee) {
-		util.validate(employee);
-		EmployeeEntity empEnttity = employeeRepository.save(getEmployeeEntity(employee));
-		return getEmployee(empEnttity);
 	}
 
 }
