@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.paypal.bfs.test.employeeserv.api.model.Address;
 import com.paypal.bfs.test.employeeserv.api.model.Employee;
+import com.paypal.bfs.test.employeeserv.entities.AddressEntity;
 import com.paypal.bfs.test.employeeserv.entities.EmployeeEntity;
 import com.paypal.bfs.test.employeeserv.exception.DuplicateRecordException;
 import com.paypal.bfs.test.employeeserv.exception.RequiredFieldsMissingException;
@@ -60,6 +61,37 @@ public class EmployeeUtil {
 		if (address.getZipCode() == null) {
 			throw new RequiredFieldsMissingException("ZIp Code in Address field is missing");
 		}
+	}
+
+	public Employee getEmployee(EmployeeEntity emp) {
+
+		Address address = new Address();
+		AddressEntity addE = emp.getAddress();
+		address.setLine1(addE.getLine1());
+		address.setLine2(addE.getLine2());
+		address.setCity(addE.getCity());
+		address.setCountry(addE.getCountry());
+		address.setZipCode(addE.getZip_code());
+
+		Employee employee = new Employee();
+		employee.setId(new Long(emp.getId()).intValue());
+		employee.setFirstName(emp.getFirstName());
+		employee.setLastName(emp.getLastName());
+		employee.setDateOfBirth(emp.getDateOfBirth());
+		employee.setAddress(address);
+		return employee;
+	}
+
+	public EmployeeEntity getEmployeeEntity(Employee emp) {
+
+		Address address = emp.getAddress();
+		AddressEntity addressE = new AddressEntity(address.getLine1(), address.getLine2(), address.getCity(),
+				address.getCountry(), address.getZipCode());
+
+		EmployeeEntity employee = new EmployeeEntity(emp.getFirstName(), emp.getLastName(), emp.getDateOfBirth(),
+				addressE);
+
+		return employee;
 	}
 
 }
